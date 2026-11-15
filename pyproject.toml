@@ -1,0 +1,18 @@
+[project]
+name = "sql-ai-agent"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "langchain>=1.4.10",
+    "langchain-google-genai>=4.4.3",
+    "langgraph>=1.2.21",
+    "matplotlib>=3.10.9",
+    "pandas>=2.3.3",
+    "python-dotenv>=1.2.4",
+    "streamlit>=1.65.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
