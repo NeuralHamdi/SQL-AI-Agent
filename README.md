@@ -1,28 +1,48 @@
+
 # SQL AI Agent
 
-A conversational Text-to-SQL application that lets users explore and analyze the **Chinook** database using natural language. The agent uses **Google Gemini** and **LangGraph** to decide which tools to call, execute read-only SQL queries, and generate charts from query results.
+SQL AI Agent is a Python application that allows users to ask questions about a SQL database using natural language.
 
-![SQL AI Agent architecture](docs/architecture.png)
+The project uses Google Gemini and LangGraph to understand questions, generate SQL queries, execute them, and display the results. It can also create charts to make data easier to understand.
 
-## Features
-
-- Ask questions about the Chinook database in natural language.
-- Discover available database tables and columns.
-- Generate and execute SQL `SELECT` queries.
-- Display SQL results in dynamic tables.
-- Export query results to CSV.
-- Generate charts when requested by the user.
-- Orchestrate the conversation and tool execution with LangGraph.
-- Provide a DEMO mode with predefined SQL and a REAL mode powered by Gemini.
+The application uses the Chinook database, a sample database for a music store.
 
 ## Architecture
 
-1. **Streamlit (`app.py`)** — user interface, conversation history, tables, CSV export and chart display.
-2. **LangGraph (`agent.py`)** — manages the agent workflow and routes Gemini tool calls.
-3. **Gemini** — interprets the user's question and decides which tool to use.
-4. **SQL tools (`tools/sql_tools.py`)** — inspect the schema and execute read-only SQL queries.
-5. **Chart tool (`tools/chart_tool.py`)** — creates chart images from SQL results.
-6. **Chinook (SQLite)** — sample music-store database used by the application.
+![Project architecture](docs/architecture.png)
+
+## Main features
+
+- Ask questions about the database in natural language.
+- Explore database tables and columns.
+- Generate and execute SQL SELECT queries.
+- Display query results in tables.
+- Export results to CSV.
+- Generate charts from query results.
+- Use Gemini and LangGraph to manage the agent workflow.
+- Run the application in DEMO mode or REAL mode.
+
+## Example
+
+For example, the user can ask:
+
+**"Quels sont les 5 pays avec le chiffre d'affaires total le plus élevé ?"**
+
+The agent generates the SQL query, retrieves the results, and creates a chart to compare the five countries.
+
+![Top 5 countries by revenue](docs/screenshots/top-5-countries-revenue.png)
+
+## Technologies
+
+- Python
+- Google Gemini API
+- LangChain
+- LangGraph
+- SQLite
+- Streamlit
+- Pandas
+- Matplotlib
+- uv
 
 ## Project structure
 
@@ -31,137 +51,81 @@ SQL-AI-Agent/
 ├── app.py
 ├── agent.py
 ├── config.py
-├── main.py
 ├── database/
-│   └── chinook.db
+│   ├── chinook.db
+│   └── setup_db.py
 ├── tools/
-│   ├── __init__.py
 │   ├── sql_tools.py
 │   └── chart_tool.py
-├── generated/
-│   └── charts/
 ├── tests/
 ├── docs/
-│   └── architecture.png
+│   ├── architecture.png
+│   └── screenshots/
+│       └── top-5-countries-revenue.png
 ├── .env.example
 ├── .gitignore
 ├── pyproject.toml
-└── uv.lock
+├── uv.lock
+└── README.md
 ```
 
-> Adjust this tree if your actual filenames or folders differ. Do not commit `.env`, virtual environments, Python cache files, or private credentials.
-
-## Tech stack
-
-- Python
-- SQLite
-- Google Gemini API
-- LangChain
-- LangGraph
-- Streamlit
-- Pandas
-- Matplotlib
-- uv
-
-## Getting started
+## Installation
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-cd YOUR_REPOSITORY
+git clone https://github.com/NeuralHamdi/SQL-AI-Agent.git
+cd SQL-AI-Agent
 ```
 
 ### 2. Install dependencies
-
-This project uses `uv`.
 
 ```bash
 uv sync
 ```
 
-If you do not have `uv`, install it by following the official instructions: https://docs.astral.sh/uv/
+### 3. Configure the API key
 
-### 3. Configure environment variables
-
-Create a local `.env` file based on `.env.example`.
+Create a `.env` file from `.env.example` and add your Gemini API key:
 
 ```env
-GOOGLE_API_KEY=your_gemini_api_key
-GEMINI_MODEL=your_available_gemini_model
+GOOGLE_API_KEY=your_api_key
+GEMINI_MODEL=your_model_name
 DEMO_MODE=false
 ```
 
-Get an API key from Google AI Studio: https://aistudio.google.com/apikey
+You can get an API key from Google AI Studio:
 
-**Security:** Never commit your `.env` file or share your API key. The `.env.example` file should contain placeholders only.
+https://aistudio.google.com/apikey
 
-### 4. Check the database
-
-Make sure the SQLite database exists at:
-
-```text
-database/chinook.db
-```
-
-If the database is not included in the repository, add instructions here explaining how to obtain or create it.
-
-### 5. Run the application
+### 4. Run the application
 
 ```bash
 uv run streamlit run app.py
 ```
 
-Open the local URL printed by Streamlit in your browser.
+Open the local URL provided by Streamlit.
 
 ## Example questions
 
-Try questions such as:
-
-- Which 10 countries generate the highest revenue? Show a table and a horizontal bar chart.
-- Which artists generate the most revenue?
-- How does revenue evolve month by month? Show a line chart.
-- Which music genres have the most sales?
+- Which countries generate the most revenue?
 - Which customers have spent the most?
-- How many invoices are stored in the database?
-
-The agent should generate different SQL queries and visualizations based on the question. The chart tool is intended to run only when a chart is requested.
-
-## Safety and query handling
-
-The SQL execution layer is designed for read-only analysis. It should accept `SELECT` queries and reject data-modification statements. Review `tools/sql_tools.py` and its tests before exposing the application to untrusted users.
+- Which artists have the highest sales?
+- Which music genres are the most popular?
+- How does revenue change over time?
 
 ## Tests
 
-Run the test suite with:
+To run the tests:
 
 ```bash
 uv run pytest
 ```
 
-## Current limitations
-
-- The application currently targets the Chinook SQLite database.
-- SQL quality depends on the model's understanding of the database schema.
-- Gemini API availability and free-tier quotas may affect REAL mode.
-- This project is a learning and portfolio project, not a production-grade database access service.
-
-## Roadmap
-
-- [ ] Add more SQL question and chart tests.
-- [ ] Improve SQL error recovery and query validation.
-- [ ] Add support for more chart types.
-- [ ] Improve conversation memory and multi-turn analysis.
-- [ ] Add Docker deployment.
-- [ ] Evaluate generated SQL against a set of expected queries.
-
 ## Author
 
-**Ahmed Hamdi**  
-Engineering student — Big Data & Artificial Intelligence
+Ahmed Hamdi
 
-- GitHub: https://github.com/NeuralHamdi
+Engineering Student in Big Data and Artificial Intelligence
 
----
-
-If you find this project useful, feel free to star the repository or open an issue.
+GitHub: https://github.com/NeuralHamdi
