@@ -132,7 +132,9 @@ def chatbot(state: MessagesState):
         6. Ne demande jamais à tracer un graphique si
            l'utilisateur demande seulement une réponse textuelle.
 
-        7. Présente les résultats clairement en français.
+      7. Présente les résultats clairement, dans la même langue
+   que celle utilisée par l'utilisateur dans sa question
+   (français, anglais, arabe, etc.).
         """
     )
 
